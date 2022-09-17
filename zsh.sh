@@ -1,6 +1,6 @@
 #!/usr/bin/env bash 
 
-script_version=1.0
+script_version=1.1
 
 check_command_exists() {
     which ${@} >/dev/null 2>&1 && return
@@ -90,8 +90,6 @@ check_root() {
 
 # Initialization.
 # Check for dependencies and permissions.
-check_and_install lolcat
-check_and_install figlet
 show_intro
 sleep 3s
 
@@ -105,11 +103,6 @@ if [ -d $HOME/.oh-my-zsh ]; then
     status_warning "Oh My Zsh directory already exists."
 else
     status_desc "Installing Oh My Zsh"
-    if ! ohmyzsh_contents=$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh); then
-        status_error "Could not curl the Oh My Zsh installer!" "Exiting program"...
-        exit
-    fi
-    # | bash 
     if ! sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" ; then
         status_error "Something went wrong during the Oh My Zsh installation!" "Exiting program..."
         exit
@@ -139,34 +132,44 @@ status_ok "zsh-syntax-highlighting been successfully cloned."
 
 status_desc "Looking up fonts directory..."
 
-if ! [ -d ~/.local/share/fonts ]; then
-    mkdir ~/.local/share/fonts
-    # status_error "Could not locate fonts directory!" "Exiting program..."
-    # exit
-fi
-status_ok "Found the fonts directory."
-
-status_desc "Installing fonts..."
-if ! curl -L -o ~/.local/share/fonts/MesloLGS\ NF\ Regular.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf; then
-    status_error "Could not install font!" "Exiting program..."
-    exit
-fi
-
-if ! curl -L -o ~/.local/share/fonts/MesloLGS\ NF\ Bold.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf; then
-    status_error "Could not install font!" "Exiting program..."
-    exit
+if [ -d $HOME/.local/share/fonts ]; then
+    font_dir=$HOME/.local/share/fonts
+    status_ok "Found the fonts directory."
+    install_fonts=true
+elif [ -d /usr/local/share/fonts ]; then
+    font_dir=/usr/local/share/fonts
+    status_ok "Found the fonts directory."
+    install_fonts=true
+else
+    status_error "Fonts directory not found." "Will proceed without installing any fonts."
+    install_fonts=false
 fi
 
-if ! curl -L -o ~/.local/share/fonts/MesloLGS\ NF\ Italic.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf; then
-    status_error "Could not install font!" "Exiting program..."
-    exit
-fi
+if [ ${install_fonts} = true ]; then
+    status_desc "Installing fonts..."
+    if ! sudo curl -L -o ${font_dir}/MesloLGS\ NF\ Regular.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf; then
+        status_error "Could not install font!" "Exiting program..."
+        exit
+    fi
 
-if ! curl -L -o ~/.local/share/fonts/MesloLGS\ NF\ Bold\ Italic.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf; then
-    status_error "Could not install font!" "Exiting program..."
-    exit
+    if ! sudo curl -L -o ${font_dir}/MesloLGS\ NF\ Bold.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf; then
+        status_error "Could not install font!" "Exiting program..."
+        exit
+    fi
+
+    if ! sudo curl -L -o ${font_dir}/MesloLGS\ NF\ Italic.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf; then
+        status_error "Could not install font!" "Exiting program..."
+        exit
+    fi
+
+    if ! sudo curl -L -o ${font_dir}/MesloLGS\ NF\ Bold\ Italic.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf; then
+        status_error "Could not install font!" "Exiting program..."
+        exit
+    fi
+    status_ok "Installed fonts successfully."
+else
+    status_warning "Fonts won't be installed"
 fi
-status_ok "Installed fonts successfully."
 
 status_desc "Downloading .zshrc file..."
 if ! curl -s https://dotfiles.bjvanbemmel.nl/zsh/raws/.zshrc > $HOME/.zshrc; then
@@ -215,11 +218,13 @@ rm -rf ./zsh-syntax-highlighting
 status_desc "Changing default shell..."
 
 if ! chsh -s $(which zsh); then
-    status_error "Could not change the default shell." "Exiting program..."
-    exit
+    status_error "Could not change the default shell." "Proceeding..."
 fi
 status_ok "Changed default shell to zsh."
 
+if [ ${install_fonts=false} ]; then
+    status_warning "Failed to install the recommended fonts during this installation.\nThe recommended font is MesloLGS NF, maybe consider doing it manually."
+fi
 status_ok "Installation complete! Enjoy your new configuration by typing $(tput setab 255 && tput setaf 0 && tput bold) zsh $(tput sgr0)" >&2
 
 sleep 3s
