@@ -11,9 +11,11 @@ install_package() {
     if check_command_exists dnf; then
         sudo dnf install -yq ${@}
     elif check_command_exists apt; then
-        sudo apt -qq install -y ${@}
+        sudo apt install -y ${@}
     elif check_command_exists pacman; then
         sudo pacman -S --no-confirm --quiet ${@}
+    elif check_command_exists brew; then
+        sudo brew install ${@} --force --quiet
     else
         status_error "No compatible package manager found."
         exit
@@ -29,7 +31,7 @@ check_and_install() {
     fi
 
     if check_command_exists ${1}; then
-        status_ok "${1} has been installed."
+        status_ok "${1} has been successfully installed."
     else
         status_error "Failed to install ${1}!"
         exit
@@ -37,6 +39,7 @@ check_and_install() {
 }
 
 show_intro() {
+    clear
     if ! check_command_exists figlet || ! check_command_exists lolcat; then
         echo "$(tput setaf 6 && tput bold)Zsh config installer$(tput sgr0)"
         echo -e "Installer v${script_version}\n"
@@ -50,25 +53,26 @@ show_intro() {
 } >&2
 
 status_desc() {
-    echo "$(tput setaf 244 && tput bold)${@}$(tput sgr0)"
+    echo -e "$(tput setaf 244 && tput bold)${@}$(tput sgr0) \n"
 } >&2
 
 status_error() {
-    echo "$(tput setab 1 && tput setaf 0 && tput bold) ERROR! $(tput sgr0) ${1}"
+    echo -e "$(tput setab 1 && tput setaf 0 && tput bold) ERROR! $(tput sgr0) ${1}\n"
     if [[ $(echo ${2} | wc -l) -gt 0 ]]; then
         status_desc ${2}
     fi
+    return 1
 } >&2
 
 status_warning() {
-    echo "$(tput setab 11 && tput setaf 0 && tput bold) WARN! $(tput sgr0) ${1}"
+    echo -e "$(tput setab 11 && tput setaf 0 && tput bold) WARN! $(tput sgr0) ${1}\n"
     if [[ $(echo ${2} | wc -l) -gt 0 ]]; then
         status_desc ${2}
     fi
 } >&2
 
 status_ok() {
-    echo "$(tput setab 2 && tput setaf 0 && tput bold) OK! $(tput sgr0) ${1}"
+    echo -e "$(tput setab 2 && tput setaf 0 && tput bold) OK! $(tput sgr0) ${1}\n"
     if [[ $(${2} | wc -l) -gt 0 ]]; then
         status_desc ${1}
     fi
@@ -86,9 +90,136 @@ check_root() {
 
 # Initialization.
 # Check for dependencies and permissions.
+check_and_install lolcat
+check_and_install figlet
 show_intro
+sleep 3s
+
+check_and_install sudo
 check_root
 check_and_install zsh
-check_and_install cowsay
+check_and_install git
 
+status_desc "Checking if Oh My Zsh is installed..."
+if [ -d $HOME/.oh-my-zsh ]; then
+    status_warning "Oh My Zsh directory already exists."
+else
+    status_desc "Installing Oh My Zsh"
+    if ! ohmyzsh_contents=$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh); then
+        status_error "Could not curl the Oh My Zsh installer!" "Exiting program"...
+        exit
+    fi
+    # | bash 
+    if ! sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" ; then
+        status_error "Something went wrong during the Oh My Zsh installation!" "Exiting program..."
+        exit
+    fi
+fi
 
+status_desc "Installing zsh-z..."
+if ! git clone https://github.com/agkozak/zsh-z ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-z ; then
+    status_error "Something went wrong when cloning zsh-z!" "Exiting program..."
+    exit
+fi
+status_ok "Zsh-z has been successfully cloned."
+
+status_desc "Installing Zsh-autosuggestions..."
+if ! git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions ; then
+    status_error "Something went wrong when cloning zsh-autosuggestions!" "Exiting program..."
+    exit
+fi
+status_ok "Zsh-autosuggestions has been successfully cloned."
+
+status_desc "Installing Zsh-syntax-highlighting..."
+if ! git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting ; then
+    status_error "Something went wrong when cloning zsh-syntax-highlighting!" "Exiting program..."
+    exit
+fi
+status_ok "zsh-syntax-highlighting been successfully cloned."
+
+status_desc "Looking up fonts directory..."
+
+if ! [ -d ~/.local/share/fonts ]; then
+    mkdir ~/.local/share/fonts
+    # status_error "Could not locate fonts directory!" "Exiting program..."
+    # exit
+fi
+status_ok "Found the fonts directory."
+
+status_desc "Installing fonts..."
+if ! curl -L -o ~/.local/share/fonts/MesloLGS\ NF\ Regular.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Regular.ttf; then
+    status_error "Could not install font!" "Exiting program..."
+    exit
+fi
+
+if ! curl -L -o ~/.local/share/fonts/MesloLGS\ NF\ Bold.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf; then
+    status_error "Could not install font!" "Exiting program..."
+    exit
+fi
+
+if ! curl -L -o ~/.local/share/fonts/MesloLGS\ NF\ Italic.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf; then
+    status_error "Could not install font!" "Exiting program..."
+    exit
+fi
+
+if ! curl -L -o ~/.local/share/fonts/MesloLGS\ NF\ Bold\ Italic.ttf https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf; then
+    status_error "Could not install font!" "Exiting program..."
+    exit
+fi
+status_ok "Installed fonts successfully."
+
+status_desc "Downloading .zshrc file..."
+if ! curl -s https://dotfiles.bjvanbemmel.nl/zsh/raws/.zshrc > $HOME/.zshrc; then
+    status_error "Something went wrong when downloading the .zshrc file!" "Exiting program..."
+    exit
+fi
+status_ok ".zshrc file successfully downloaded."
+
+if ! curl -s https://dotfiles.bjvanbemmel.nl/zsh/raws/.p10k.zsh > $HOME/.p10k.zsh; then
+    status_error "Something went wrong when downloading the .p10k.zsh file!" "Exiting program..."
+    exit
+fi
+status_ok ".p10k.zsh file successfully downloaded."
+
+status_desc "Installing powerlevel10k..."
+if ! git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k; then
+    status_error "Something went wrong when cloning powerlevel10k!" "Exiting program..."
+    exit
+fi
+
+status_desc "Installing zsh-vi-mode..."
+if ! git clone https://github.com/jeffreytse/zsh-vi-mode.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh}/plugins/zsh-vi-mode; then
+    status_error "Something went wrong when cloning zsh-vi-mode!" "Exiting program..."
+    exit
+fi
+status_ok "Zsh-vi-mode successfully installed."
+
+status_desc "Cloning catppuccin-zsh-syntax-highlighting..."
+if ! git clone https://github.com/catppuccin/zsh-syntax-highlighting.git; then
+    status_error "Something went wrong when cloning catppuccin-zsh-syntax-highlighting" "Exiting program..."
+    exit
+fi
+status_ok "catppuccin-zsh-syntax-highlighting successfully cloned."
+
+mkdir $HOME/.zsh
+
+status_desc "Installing catppuccin-zsh-syntax-highlighting..."
+if ! cp -v ./zsh-syntax-highlighting/catppuccin-zsh-syntax-highlighting.zsh $HOME/.zsh/catppuccin-zsh-syntax-highlighting.zsh; then
+    status_error "Something went wrong when installing catppuccin-zsh-syntax-highlighting!" "Exiting program..."
+    exit
+fi
+status_ok "catppuccin-zsh-syntax-highlighting successfully installed."
+
+rm -rf ./zsh-syntax-highlighting
+
+status_desc "Changing default shell..."
+
+if ! chsh -s $(which zsh); then
+    status_error "Could not change the default shell." "Exiting program..."
+    exit
+fi
+status_ok "Changed default shell to zsh."
+
+status_ok "Installation complete! Enjoy your new configuration by typing $(tput setab 255 && tput setaf 0 && tput bold) zsh $(tput sgr0)" >&2
+
+sleep 3s
