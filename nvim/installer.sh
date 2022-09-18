@@ -1,0 +1,157 @@
+#!/usr/bin/env bash 
+
+script_version=1.0
+
+check_command_exists() {
+    which ${@} >/dev/null 2>&1 && return
+}
+
+install_package() {
+    status_desc "Installing ${@}..."
+    if check_command_exists dnf; then
+        sudo dnf install -yq ${@}
+    elif check_command_exists apt; then
+        sudo apt install -y ${@}
+    elif check_command_exists pacman; then
+        sudo pacman -S --no-confirm --quiet ${@}
+    elif check_command_exists brew; then
+        sudo brew install ${@} --force --quiet
+    else
+        status_error "No compatible package manager found."
+        exit
+    fi
+
+}
+
+check_and_install() {
+    status_desc "Checking if ${1} is installed..."
+    if ! check_command_exists ${1}; then
+        status_warning "${1} not installed!"
+        install_package ${1}
+    fi
+
+    if check_command_exists ${1}; then
+        status_ok "${1} has been successfully installed."
+    else
+        status_error "Failed to install ${1}!"
+        exit
+    fi
+}
+
+show_intro() {
+    clear
+    if ! check_command_exists figlet || ! check_command_exists lolcat; then
+        echo "$(tput setaf 6 && tput bold)Neovim config installer$(tput sgr0)"
+        echo -e "Installer v${script_version}\n"
+        echo -e "(c) Beau Jean van Bemmel, 2022 - $(date "+%Y")\n"
+        return
+    fi
+
+    echo "Neovim config installer" | figlet | lolcat
+    echo -e "Installer v${script_version}\n"
+    echo -e "(c) Beau Jean van Bemmel, $(date "+%Y")\n"
+} >&2
+
+status_desc() {
+    echo -e "$(tput setaf 244 && tput bold)${@}$(tput sgr0) \n"
+} >&2
+
+status_error() {
+    echo -e "$(tput setab 1 && tput setaf 0 && tput bold) ERROR! $(tput sgr0) ${1}\n"
+    if [[ $(echo ${2} | wc -l) -gt 0 ]]; then
+        status_desc ${2}
+    fi
+    return 1
+} >&2
+
+status_warning() {
+    echo -e "$(tput setab 11 && tput setaf 0 && tput bold) WARN! $(tput sgr0) ${1}\n"
+    if [[ $(echo ${2} | wc -l) -gt 0 ]]; then
+        status_desc ${2}
+    fi
+} >&2
+
+status_ok() {
+    echo -e "$(tput setab 2 && tput setaf 0 && tput bold) OK! $(tput sgr0) ${1}\n"
+    if [[ $(${2} | wc -l) -gt 0 ]]; then
+        status_desc ${1}
+    fi
+} >&2
+
+check_root() {
+    current_user=$(whoami)
+
+    if [ ${current_user} != 'root' ]; then
+        status_warning "User not root!" "Password authentication might be required."
+    else
+        status_ok "User is root!"
+    fi
+}
+
+# Initialization.
+# Check for dependencies and permissions.
+show_intro
+sleep 3s
+
+check_root
+check_and_install sudo
+check_and_install lua
+check_and_install gcc
+
+status_desc "Checking for neovim installation..."
+if ! check_command_exists nvim; then
+    status_warning "Neovim not installed." "Installing..."
+    install_package neovim
+
+    if ! check_command_exists nvim; then
+        status_error "Could not install neovim!" "Exiting..."
+        exit
+    fi
+
+    status_ok "Neovim successfully installed."
+fi
+status_ok "Neovim already installed."
+
+check_and_install tar
+
+status_desc "Checking for exiting config directory..."
+if ! [ -d $HOME/.config ]; then
+    status_warning "Config directory not found." "Creating one..."
+fi
+status_ok "Found config directory."
+
+status_desc "Checking for pre-existing nvim config..."
+if [ -d $HOME/.config/nvim ]; then
+    status_error "Pre-existing nvim config found! Please remove the ${HOME}/.config/nvim directory before installing." "Exiting..."
+    exit
+else
+    status_desc "Downloading nvim archive..."
+    if ! curl -O https://dotfiles.bjvanbemmel.nl/nvim/raws/.nvim.tar.gz; then
+        status_error "Could not download nvim archive!" "Exiting..."
+        exit
+    fi
+    status_ok "Successfully downloaded nvim archive."
+
+    status_desc "Extracting nvim archive..."
+    if ! tar -xzf .nvim.tar.gz -C $HOME; then
+        status_error "Could not extract nvim archive!" "Exiting..."
+        exit
+    fi
+    status_ok "Successfully extracted nvim archive."
+
+    status_desc "Removing remaining archive..."
+    if ! rm .nvim.tar.gz; then
+        status_error "Could not remove remaining archive!" "Proceeding..."
+    else
+        status_ok "Successfully removed remaining archive!"
+    fi
+
+    status_desc "Cloning Packer..."
+    if ! $(git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim); then
+        status_error "Could not clone Packer." "Exiting..."
+        exit
+    fi
+    status_ok "Successfully cloned Packer."
+fi
+
+status_ok "Finished installing!"
