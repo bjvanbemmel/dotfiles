@@ -93,8 +93,8 @@ check_root() {
 show_intro
 sleep 3s
 
-check_and_install sudo
 check_root
+check_and_install sudo
 check_and_install zsh
 check_and_install git
 
