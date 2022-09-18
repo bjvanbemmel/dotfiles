@@ -22,6 +22,16 @@ To install my **zsh** config, run the following command;
 ```bash
 curl -s https://bjvanbemmel.nl/zsh/installer | bash
 ```
+##### 2. Tmux
+To install my **tmux** config, run the following command;
+```bash
+curl -s https://bjvanbemmel.nl/tmux/installer | bash
+```
+##### 3. Neovim
+To install my **neovim** config, run the following command;
+```bash
+curl -s https://bjvanbemmel.nl/nvim/installer | bash
+```
 
 ### Manual Installation
 ##### 1. Zsh
@@ -60,6 +70,6 @@ git clone https://github.com/bjvanbemmel/dotfiles.github
 cp -r dotfiles/zsh/raws/* ~/
 ```
 Install the recommended fonts here using these instructions: https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k.
-## Upcoming dotfiles + installers
-- **Nvim** (dotfiles + installer)
-- **Tmux** (dotfiles + installer)
+## Upcoming dotfiles
+- **Nvim** (dotfiles) (installer already available)
+- **Tmux** (dotfiles) (installer already available)
