@@ -226,5 +226,3 @@ if [ ${install_fonts=false} ]; then
     status_warning "Failed to install the recommended fonts during this installation.\nThe recommended font is MesloLGS NF, maybe consider doing it manually."
 fi
 status_ok "Installation complete! Enjoy your new configuration by typing $(tput setab 255 && tput setaf 0 && tput bold) zsh $(tput sgr0)" >&2
-
-sleep 3s
