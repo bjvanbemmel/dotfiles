@@ -1,6 +1,6 @@
 #!/usr/bin/env bash 
 
-script_version=1.1
+script_version=1.0
 
 check_command_exists() {
     which ${@} >/dev/null 2>&1 && return
@@ -41,13 +41,13 @@ check_and_install() {
 show_intro() {
     clear
     if ! check_command_exists figlet || ! check_command_exists lolcat; then
-        echo "$(tput setaf 6 && tput bold)Zsh config installer$(tput sgr0)"
+        echo "$(tput setaf 6 && tput bold)Tmux config installer$(tput sgr0)"
         echo -e "Installer v${script_version}\n"
         echo -e "(c) Beau Jean van Bemmel, 2022 - $(date "+%Y")\n"
         return
     fi
 
-    echo "Zsh config installer" | figlet | lolcat
+    echo "Tmux config installer" | figlet | lolcat
     echo -e "Installer v${script_version}\n"
     echo -e "(c) Beau Jean van Bemmel, $(date "+%Y")\n"
 } >&2
@@ -96,3 +96,51 @@ sleep 3s
 check_root
 check_and_install sudo
 check_and_install tmux
+check_and_install tar
+
+status_desc "Checking for pre-existing files..."
+if [ -f $HOME/.tmux.conf ]; then
+    status_error "Found a pre-existing .tmux.conf file! Please remove this file before running the installer." "Exiting..."
+    exit
+fi
+
+if [ -d $HOME/.tmux ]; then
+    status_error "Found a pre-existing .tmux directory! Please remove this directory before running the intaller." "Exiting..."
+    exit
+fi
+
+status_desc "Downloading tmux configuration files..."
+if ! curl -O https://dotfiles.bjvanbemmel.nl/tmux/raws/.tmux.tar.gz; then
+    status_error "Could not download the tmux configuration files!" "Exiting program..."
+    exit
+fi
+status_ok "Successfully downloaded the tmux configuration files."
+
+status_desc "Extracting tmux configuration files..."
+if ! tar -xzf .tmux.tar.gz -C $HOME; then
+    status_error "Could not extract the tmux configuration files!" "Exiting program..."
+    exit
+fi
+status_ok "Successfully extracted the tmux configuration files."
+
+status_desc "Removing remaining archive..."
+if ! rm .tmux.tar.gz; then
+    status_error "Could not remove remaining archive!" "Exiting program..."
+    exit
+fi
+status_ok "Successfully removed the remaining archive."
+
+status_desc "Checking for attached tmux session..."
+if [[ $(echo $TMUX | wc -m) -gt 1 ]]; then
+    status_warning "Attached tmux session detected." "Will source the new configs in-session..."
+
+    if ! tmux source $HOME/.tmux.conf; then
+        status_error "Could not source new tmux config!" "Proceeding..."
+    else
+        status_ok "Successfully sourced the config."
+    fi
+else
+    status_ok "No attached tmux session found."
+fi
+
+status_ok "Finished installing!"
