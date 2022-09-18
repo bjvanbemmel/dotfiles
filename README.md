@@ -20,17 +20,17 @@ The installes does support the following package managers from the get-go:
 ##### 1. Zsh
 To install my **zsh** config, run the following command;
 ```bash
-curl -s https://bjvanbemmel.nl/zsh/installer | bash
+curl -s https://dotfiles.bjvanbemmel.nl/zsh/installer | bash
 ```
 ##### 2. Tmux
 To install my **tmux** config, run the following command;
 ```bash
-curl -s https://bjvanbemmel.nl/tmux/installer | bash
+curl -s https://dotfiles.bjvanbemmel.nl/tmux/installer | bash
 ```
 ##### 3. Neovim
 To install my **neovim** config, run the following command;
 ```bash
-curl -s https://bjvanbemmel.nl/nvim/installer | bash
+curl -s https://dotfiles.bjvanbemmel.nl/nvim/installer | bash
 ```
 
 ### Manual Installation
