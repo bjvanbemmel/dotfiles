@@ -18,7 +18,9 @@ install_package() {
         sudo brew install ${@} --force --quiet
     else
         status_error "No compatible package manager found."
-        exit
+	if [ ${2} = true ]; then
+	    exit
+	fi
     fi
 
 }
