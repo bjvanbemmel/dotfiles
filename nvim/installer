@@ -100,6 +100,7 @@ check_and_install sudo true
 check_and_install lua true
 check_and_install gcc true
 check_and_install gcc-c++
+check_and_install libstdc++-devel
 check_and_install libstdc++-static
 
 status_desc "Checking for neovim installation..."
