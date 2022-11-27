@@ -207,7 +207,7 @@ status_ok "catppuccin-zsh-syntax-highlighting successfully cloned."
 mkdir $HOME/.zsh
 
 status_desc "Installing catppuccin-zsh-syntax-highlighting..."
-if ! cp -v ./zsh-syntax-highlighting/catppuccin-zsh-syntax-highlighting.zsh $HOME/.zsh/catppuccin-zsh-syntax-highlighting.zsh; then
+if ! cp -v ./zsh-syntax-highlighting/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh $HOME/.zsh/catppuccin-zsh-syntax-highlighting.zsh; then
     status_error "Something went wrong when installing catppuccin-zsh-syntax-highlighting!" "Exiting program..."
     exit
 fi
