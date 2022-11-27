@@ -34,9 +34,6 @@ check_and_install() {
         status_ok "${1} has been successfully installed."
     else
         status_error "Failed to install ${1}!"
-	if [ ${2} = true ]; then
-	    exit
-	fi
     fi
 }
 
