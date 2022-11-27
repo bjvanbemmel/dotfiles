@@ -1,6 +1,6 @@
 #!/usr/bin/env bash 
 
-script_version=1.1
+script_version=1.2
 
 check_command_exists() {
     which ${@} >/dev/null 2>&1 && return
@@ -191,7 +191,7 @@ if ! git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUST
 fi
 
 status_desc "Installing zsh-vi-mode..."
-if ! git clone https://github.com/jeffreytse/zsh-vi-mode.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh}/plugins/zsh-vi-mode; then
+if ! git clone https://github.com/bjvanbemmel/zsh-vi-mode-fixed-syntax-highlighting ${ZSH_CUSTOM:-$HOME/.oh-my-zsh}/plugins/zsh-vi-mode; then
     status_error "Something went wrong when cloning zsh-vi-mode!" "Exiting program..."
     exit
 fi

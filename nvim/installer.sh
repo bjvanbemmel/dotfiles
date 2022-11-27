@@ -1,6 +1,6 @@
 #!/usr/bin/env bash 
 
-script_version=1.0
+script_version=1.1
 
 check_command_exists() {
     which ${@} >/dev/null 2>&1 && return
@@ -97,6 +97,8 @@ check_root
 check_and_install sudo
 check_and_install lua
 check_and_install gcc
+check_and_install gcc-c++
+check_and_install libstdc++-static
 
 status_desc "Checking for neovim installation..."
 if ! check_command_exists nvim; then

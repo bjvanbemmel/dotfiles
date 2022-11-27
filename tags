@@ -1,0 +1,52 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/banditosdoritos/Documents/programming/bash/dotfiles/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+1. Zsh	README.md	/^##### 1. Zsh$/;"	T	subsection:Dotfiles""Installation""Manual Installation
+1. Zsh	README.md	/^##### 1. Zsh$/;"	T	subsubsection:Dotfiles""Installation""Custom installers""Usage
+2. Tmux	README.md	/^##### 2. Tmux$/;"	T	subsubsection:Dotfiles""Installation""Custom installers""Usage
+3. Neovim	README.md	/^##### 3. Neovim$/;"	T	subsubsection:Dotfiles""Installation""Custom installers""Usage
+Custom installers	README.md	/^### Custom installers$/;"	S	section:Dotfiles""Installation
+Dotfiles	README.md	/^# Dotfiles$/;"	c
+Installation	README.md	/^## Installation$/;"	s	chapter:Dotfiles
+Manual Installation	README.md	/^### Manual Installation$/;"	S	section:Dotfiles""Installation
+POWERLEVEL9K_DIR_CLASSES=	zsh/raws/.p10k.zsh	/^  typeset -g POWERLEVEL9K_DIR_CLASSES=()$/;"	f
+Upcoming dotfiles	README.md	/^## Upcoming dotfiles$/;"	s	chapter:Dotfiles
+Usage	README.md	/^#### Usage$/;"	t	subsection:Dotfiles""Installation""Custom installers
+check_and_install	nvim/installer.sh	/^check_and_install() {$/;"	f
+check_and_install	tmux/installer.sh	/^check_and_install() {$/;"	f
+check_and_install	zsh/installer.sh	/^check_and_install() {$/;"	f
+check_command_exists	nvim/installer.sh	/^check_command_exists() {$/;"	f
+check_command_exists	tmux/installer.sh	/^check_command_exists() {$/;"	f
+check_command_exists	zsh/installer.sh	/^check_command_exists() {$/;"	f
+check_root	nvim/installer.sh	/^check_root() {$/;"	f
+check_root	tmux/installer.sh	/^check_root() {$/;"	f
+check_root	zsh/installer.sh	/^check_root() {$/;"	f
+install_package	nvim/installer.sh	/^install_package() {$/;"	f
+install_package	tmux/installer.sh	/^install_package() {$/;"	f
+install_package	zsh/installer.sh	/^install_package() {$/;"	f
+instant_prompt_example	zsh/raws/.p10k.zsh	/^  function instant_prompt_example() {$/;"	f
+my_git_formatter	zsh/raws/.p10k.zsh	/^  function my_git_formatter() {$/;"	f
+prompt_example	zsh/raws/.p10k.zsh	/^  function prompt_example() {$/;"	f
+show_intro	nvim/installer.sh	/^show_intro() {$/;"	f
+show_intro	tmux/installer.sh	/^show_intro() {$/;"	f
+show_intro	zsh/installer.sh	/^show_intro() {$/;"	f
+status_desc	nvim/installer.sh	/^status_desc() {$/;"	f
+status_desc	tmux/installer.sh	/^status_desc() {$/;"	f
+status_desc	zsh/installer.sh	/^status_desc() {$/;"	f
+status_error	nvim/installer.sh	/^status_error() {$/;"	f
+status_error	tmux/installer.sh	/^status_error() {$/;"	f
+status_error	zsh/installer.sh	/^status_error() {$/;"	f
+status_ok	nvim/installer.sh	/^status_ok() {$/;"	f
+status_ok	tmux/installer.sh	/^status_ok() {$/;"	f
+status_ok	zsh/installer.sh	/^status_ok() {$/;"	f
+status_warning	nvim/installer.sh	/^status_warning() {$/;"	f
+status_warning	tmux/installer.sh	/^status_warning() {$/;"	f
+status_warning	zsh/installer.sh	/^status_warning() {$/;"	f
