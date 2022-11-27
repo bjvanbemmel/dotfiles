@@ -137,7 +137,7 @@ else
     status_ok "Successfully downloaded nvim archive."
 
     status_desc "Extracting nvim archive..."
-    if ! tar -xf .nvim.tar.gz -C $HOME; then
+    if ! tar -xzf .nvim.tar.gz -C $HOME; then
         status_error "Could not extract nvim archive!" "Exiting..."
         exit
     fi
