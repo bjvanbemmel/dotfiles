@@ -20,33 +20,33 @@ Manual Installation	README.md	/^### Manual Installation$/;"	S	section:Dotfiles""
 POWERLEVEL9K_DIR_CLASSES=	zsh/raws/.p10k.zsh	/^  typeset -g POWERLEVEL9K_DIR_CLASSES=()$/;"	f
 Upcoming dotfiles	README.md	/^## Upcoming dotfiles$/;"	s	chapter:Dotfiles
 Usage	README.md	/^#### Usage$/;"	t	subsection:Dotfiles""Installation""Custom installers
-check_and_install	nvim/installer.sh	/^check_and_install() {$/;"	f
-check_and_install	tmux/installer.sh	/^check_and_install() {$/;"	f
-check_and_install	zsh/installer.sh	/^check_and_install() {$/;"	f
-check_command_exists	nvim/installer.sh	/^check_command_exists() {$/;"	f
-check_command_exists	tmux/installer.sh	/^check_command_exists() {$/;"	f
-check_command_exists	zsh/installer.sh	/^check_command_exists() {$/;"	f
-check_root	nvim/installer.sh	/^check_root() {$/;"	f
-check_root	tmux/installer.sh	/^check_root() {$/;"	f
-check_root	zsh/installer.sh	/^check_root() {$/;"	f
-install_package	nvim/installer.sh	/^install_package() {$/;"	f
-install_package	tmux/installer.sh	/^install_package() {$/;"	f
-install_package	zsh/installer.sh	/^install_package() {$/;"	f
+check_and_install	nvim/installer	/^check_and_install() {$/;"	f
+check_and_install	tmux/installer	/^check_and_install() {$/;"	f
+check_and_install	zsh/installer	/^check_and_install() {$/;"	f
+check_command_exists	nvim/installer	/^check_command_exists() {$/;"	f
+check_command_exists	tmux/installer	/^check_command_exists() {$/;"	f
+check_command_exists	zsh/installer	/^check_command_exists() {$/;"	f
+check_root	nvim/installer	/^check_root() {$/;"	f
+check_root	tmux/installer	/^check_root() {$/;"	f
+check_root	zsh/installer	/^check_root() {$/;"	f
+install_package	nvim/installer	/^install_package() {$/;"	f
+install_package	tmux/installer	/^install_package() {$/;"	f
+install_package	zsh/installer	/^install_package() {$/;"	f
 instant_prompt_example	zsh/raws/.p10k.zsh	/^  function instant_prompt_example() {$/;"	f
 my_git_formatter	zsh/raws/.p10k.zsh	/^  function my_git_formatter() {$/;"	f
 prompt_example	zsh/raws/.p10k.zsh	/^  function prompt_example() {$/;"	f
-show_intro	nvim/installer.sh	/^show_intro() {$/;"	f
-show_intro	tmux/installer.sh	/^show_intro() {$/;"	f
-show_intro	zsh/installer.sh	/^show_intro() {$/;"	f
-status_desc	nvim/installer.sh	/^status_desc() {$/;"	f
-status_desc	tmux/installer.sh	/^status_desc() {$/;"	f
-status_desc	zsh/installer.sh	/^status_desc() {$/;"	f
-status_error	nvim/installer.sh	/^status_error() {$/;"	f
-status_error	tmux/installer.sh	/^status_error() {$/;"	f
-status_error	zsh/installer.sh	/^status_error() {$/;"	f
-status_ok	nvim/installer.sh	/^status_ok() {$/;"	f
-status_ok	tmux/installer.sh	/^status_ok() {$/;"	f
-status_ok	zsh/installer.sh	/^status_ok() {$/;"	f
-status_warning	nvim/installer.sh	/^status_warning() {$/;"	f
-status_warning	tmux/installer.sh	/^status_warning() {$/;"	f
-status_warning	zsh/installer.sh	/^status_warning() {$/;"	f
+show_intro	nvim/installer	/^show_intro() {$/;"	f
+show_intro	tmux/installer	/^show_intro() {$/;"	f
+show_intro	zsh/installer	/^show_intro() {$/;"	f
+status_desc	nvim/installer	/^status_desc() {$/;"	f
+status_desc	tmux/installer	/^status_desc() {$/;"	f
+status_desc	zsh/installer	/^status_desc() {$/;"	f
+status_error	nvim/installer	/^status_error() {$/;"	f
+status_error	tmux/installer	/^status_error() {$/;"	f
+status_error	zsh/installer	/^status_error() {$/;"	f
+status_ok	nvim/installer	/^status_ok() {$/;"	f
+status_ok	tmux/installer	/^status_ok() {$/;"	f
+status_ok	zsh/installer	/^status_ok() {$/;"	f
+status_warning	nvim/installer	/^status_warning() {$/;"	f
+status_warning	tmux/installer	/^status_warning() {$/;"	f
+status_warning	zsh/installer	/^status_warning() {$/;"	f
